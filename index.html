@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fitness Zone Ambikapur</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    /* ---------- Base ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+    }
+    body {
+      background: #0b0d10;
+      color: #f0f2f5;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1a1d23;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #e94f37;
+      border-radius: 8px;
+    }
+
+    /* ---------- Preloader ---------- */
+    #preloader {
+      position: fixed;
+      inset: 0;
+      background: #0b0d10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.6s ease;
+    }
+    #preloader.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .loader {
+      width: 60px;
+      height: 60px;
+      border: 5px solid #2a2d33;
+      border-top-color: #e94f37;
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+    }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ---------- Particles Canvas ---------- */
+    #particles-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ---------- Main Wrapper ---------- */
+    .main-wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ---------- Navbar ---------- */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      flex-wrap: wrap;
+      gap: 12px;
+      animation: fadeDown 0.9s ease;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.7rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .logo i {
+      color: #e94f37;
+      font-size: 2rem;
+      filter: drop-shadow(0 0 8px #e94f3766);
+    }
+    .logo span {
+      background: linear-gradient(135deg, #f0f2f5 0%, #e94f37 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      font-weight: 500;
+      font-size: 1rem;
+    }
+    .nav-links a {
+      color: #b0b8c5;
+      text-decoration: none;
+      transition: 0.3s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 0%;
+      height: 2.5px;
+      background: #e94f37;
+      transition: 0.3s;
+    }
+    .nav-links a:hover {
+      color: #fff;
+    }
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+    .nav-cta {
+      background: #e94f37;
+      padding: 8px 22px;
+      border-radius: 40px;
+      font-weight: 600;
+      color: #fff !important;
+      transition: 0.3s;
+      box-shadow: 0 0 20px #e94f3744;
+    }
+    .nav-cta:hover {
+      transform: scale(1.04);
+      background: #ff5f45;
+      box-shadow: 0 0 30px #e94f3766;
+    }
+    .nav-cta::after {
+      display: none !important;
+    }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 50px 0 40px;
+      flex-wrap: wrap;
+      gap: 30px;
+      min-height: 70vh;
+    }
+    .hero-content {
+      flex: 1 1 500px;
+      animation: fadeUp 1s ease;
+    }
+    .hero-content .badge {
+      display: inline-block;
+      background: rgba(233, 79, 55, 0.18);
+      color: #e94f37;
+      padding: 6px 18px;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(233, 79, 55, 0.25);
+    }
+    .hero-content h1 {
+      font-size: clamp(2.6rem, 7vw, 4.8rem);
+      line-height: 1.1;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+    .hero-content h1 .highlight {
+      background: linear-gradient(135deg, #e94f37, #f7a072);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-content p {
+      font-size: 1.15rem;
+      color: #b0b8c5;
+      max-width: 520px;
+      margin-bottom: 30px;
+      line-height: 1.7;
+    }
+    .hero-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .btn-primary {
+      background: #e94f37;
+      border: none;
+      padding: 14px 38px;
+      border-radius: 60px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 8px 28px #e94f3744;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .btn-primary:hover {
+      transform: translateY(-4px) scale(1.02);
+      background: #ff5f45;
+      box-shadow: 0 12px 36px #e94f3766;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 2px solid #3a3f49;
+      padding: 14px 38px;
+      border-radius: 60px;
+      font-weight: 600;
+      color: #f0f2f5;
+      cursor: pointer;
+      transition: 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .btn-outline:hover {
+      border-color: #e94f37;
+      color: #e94f37;
+      transform: translateY(-4px);
+    }
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      margin-top: 35px;
+      flex-wrap: wrap;
+    }
+    .hero-stats div {
+      text-align: left;
+    }
+    .hero-stats .num {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.5px;
+    }
+    .hero-stats .label {
+      font-size: 0.9rem;
+      color: #8d96a8;
+    }
+    .hero-visual {
+      flex: 1 1 400px;
+      display: flex;
+      justify-content: center;
+      animation: fadeUp 1.2s ease;
+    }
+    .hero-visual .circle-bg {
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle at 30% 30%, #e94f3722, #0b0d10 70%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .hero-visual .circle-bg i {
+      font-size: 10rem;
+      color: #e94f37;
+      filter: drop-shadow(0 0 40px #e94f3766);
+      animation: float 4s ease-in-out infinite;
+    }
+    .hero-visual .circle-bg::after {
+      content: '';
+      position: absolute;
+      inset: -20px;
+      border-radius: 50%;
+      border: 2px dashed rgba(233, 79, 55, 0.2);
+      animation: spinSlow 30s linear infinite;
+    }
+
+    /* ---------- Video Section (NEW) ---------- */
+    .video-section {
+      padding: 40px 0 30px;
+      text-align: center;
+    }
+    .video-section h2 {
+      margin-bottom: 20px;
+    }
+    .video-container {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      border: 1px solid #252b33;
+    }
+    .video-container video {
+      width: 100%;
+      display: block;
+      background: #000;
+    }
+
+    /* ---------- Section Titles ---------- */
+    .section-title {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .section-sub {
+      color: #8d96a8;
+      font-size: 1.05rem;
+      max-width: 600px;
+      margin: 0 auto 40px;
+    }
+    .section-title .highlight {
+      background: linear-gradient(135deg, #e94f37, #f7a072);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ---------- Services ---------- */
+    .services {
+      padding: 60px 0 30px;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 28px;
+    }
+    .service-card {
+      background: #14181f;
+      padding: 32px 22px;
+      border-radius: 28px;
+      border: 1px solid #252b33;
+      transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #e94f37, #f7a072);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: 0.5s;
+    }
+    .service-card:hover::before {
+      transform: scaleX(1);
+    }
+    .service-card:hover {
+      transform: translateY(-10px);
+      border-color: #e94f3755;
+      box-shadow: 0 20px 40px #00000055;
+    }
+    .service-card i {
+      font-size: 2.6rem;
+      color: #e94f37;
+      margin-bottom: 18px;
+      display: inline-block;
+      transition: 0.3s;
+    }
+    .service-card:hover i {
+      transform: scale(1.1) rotate(-4deg);
+    }
+    .service-card h3 {
+      font-size: 1.35rem;
+      margin-bottom: 8px;
+    }
+    .service-card p {
+      color: #8d96a8;
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    /* ---------- Trainers with Images ---------- */
+    .trainers {
+      padding: 50px 0 30px;
+    }
+    .trainers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+    }
+    .trainer-card {
+      background: #14181f;
+      border-radius: 28px;
+      padding: 28px 18px 22px;
+      text-align: center;
+      border: 1px solid #252b33;
+      transition: 0.4s;
+    }
+    .trainer-card:hover {
+      transform: scale(1.03);
+      border-color: #e94f3755;
+      box-shadow: 0 16px 36px #00000066;
+    }
+    .trainer-card img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #e94f3744;
+      transition: 0.3s;
+      margin-bottom: 16px;
+    }
+    .trainer-card:hover img {
+      border-color: #e94f37;
+      box-shadow: 0 0 30px #e94f3733;
+    }
+    .trainer-card h4 {
+      font-size: 1.2rem;
+    }
+    .trainer-card .role {
+      color: #8d96a8;
+      font-size: 0.9rem;
+      margin: 4px 0 10px;
+    }
+    .trainer-card .exp {
+      color: #b0b8c5;
+      font-size: 0.85rem;
+      background: #1e232b;
+      padding: 4px 14px;
+      border-radius: 40px;
+      display: inline-block;
+    }
+
+    /* ---------- Pricing ---------- */
+    .pricing {
+      padding: 50px 0 30px;
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+    }
+    .pricing-card {
+      background: #14181f;
+      border-radius: 28px;
+      padding: 32px 20px 28px;
+      border: 1px solid #252b33;
+      text-align: center;
+      transition: 0.4s;
+      position: relative;
+    }
+    .pricing-card.popular {
+      border-color: #e94f37;
+      box-shadow: 0 0 30px #e94f3722;
+    }
+    .pricing-card.popular .tag {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #e94f37;
+      padding: 4px 20px;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .pricing-card:hover {
+      transform: translateY(-8px);
+      border-color: #e94f3755;
+    }
+    .pricing-card .price {
+      font-size: 2.6rem;
+      font-weight: 800;
+      color: #fff;
+      margin: 12px 0 4px;
+    }
+    .pricing-card .price small {
+      font-size: 1rem;
+      font-weight: 400;
+      color: #8d96a8;
+    }
+    .pricing-card .plan {
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+    .pricing-card ul {
+      list-style: none;
+      margin: 20px 0 24px;
+    }
+    .pricing-card ul li {
+      padding: 6px 0;
+      color: #b0b8c5;
+      font-size: 0.95rem;
+    }
+    .pricing-card ul li i {
+      color: #e94f37;
+      margin-right: 8px;
+    }
+
+    /* ---------- CTA ---------- */
+    .cta-section {
+      background: linear-gradient(145deg, #14181f, #1a1e26);
+      border-radius: 48px;
+      padding: 60px 40px;
+      margin: 50px 0 30px;
+      text-align: center;
+      border: 1px solid #252b33;
+      animation: fadeUp 1s ease;
+    }
+    .cta-section h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+    }
+    .cta-section p {
+      color: #b0b8c5;
+      max-width: 500px;
+      margin: 12px auto 30px;
+      font-size: 1.1rem;
+    }
+
+    /* ---------- Footer ---------- */
+    .footer {
+      border-top: 1px solid #1a1e26;
+      padding: 30px 0 20px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      color: #6b7488;
+      font-size: 0.95rem;
+    }
+    .footer .socials a {
+      color: #6b7488;
+      margin-left: 18px;
+      font-size: 1.3rem;
+      transition: 0.3s;
+    }
+    .footer .socials a:hover {
+      color: #e94f37;
+      transform: translateY(-3px);
+    }
+
+    /* ---------- Animations ---------- */
+    @keyframes fadeUp {
+      0% {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @keyframes fadeDown {
+      0% {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @keyframes float {
+      0%,
+      100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-18px);
+      }
+    }
+    @keyframes spinSlow {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+      }
+      .nav-links {
+        flex-wrap: wrap;
+        gap: 14px;
+        justify-content: center;
+      }
+      .hero {
+        flex-direction: column;
+        text-align: center;
+      }
+      .hero-content p {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .hero-btns {
+        justify-content: center;
+      }
+      .hero-stats {
+        justify-content: center;
+      }
+      .hero-visual .circle-bg {
+        width: 260px;
+        height: 260px;
+      }
+      .hero-visual .circle-bg i {
+        font-size: 6rem;
+      }
+      .cta-section {
+        padding: 40px 20px;
+      }
+      .video-container {
+        border-radius: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Preloader -->
+  <div id="preloader">
+    <div class="loader"></div>
+  </div>
+
+  <!-- Particle background -->
+  <canvas id="particles-canvas"></canvas>
+
+  <div class="main-wrapper">
+
+    <!-- ====== NAVBAR ====== -->
+    <nav class="navbar">
+      <div class="logo">
+        <i class="fas fa-dumbbell"></i>
+        <span>Fitness Zone</span>
+      </div>
+      <div class="nav-links">
+        <a href="#services">Services</a>
+        <a href="#trainers">Trainers</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#contact" class="nav-cta"><i class="fas fa-phone-alt"></i> Join Now</a>
+      </div>
+    </nav>
+
+    <!-- ====== HERO ====== -->
+    <section class="hero">
+      <div class="hero-content">
+        <div class="badge"><i class="fas fa-fire"></i> Ambikapur's #1 Gym</div>
+        <h1>
+          Transform Your<br />
+          <span class="highlight">Body in 90 Days</span>
+        </h1>
+        <p>
+          Join <strong>200+ members</strong> at Fitness Zone Ambikapur — the biggest gym in the city.
+          Modern equipment, certified coaches, and a community that pushes you further.
+        </p>
+        <div class="hero-btns">
+          <a href="#contact" class="btn-primary"><i class="fas fa-play"></i> Start Free Trial</a>
+          <a href="#services" class="btn-outline"><i class="fas fa-arrow-right"></i> Explore</a>
+        </div>
+        <div class="hero-stats">
+          <div><span class="num">4.7★</span><div class="label">86+ reviews</div></div>
+          <div><span class="num">200+</span><div class="label">active members</div></div>
+          <div><span class="num">10+</span><div class="label">expert trainers</div></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="circle-bg">
+          <i class="fas fa-dumbbell"></i>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== VIDEO SECTION (NEW) ====== -->
+    <section class="video-section" id="video">
+      <h2 class="section-title">Watch Our <span class="highlight">Journey</span></h2>
+      <p class="section-sub">Experience the energy and transformation at Fitness Zone Ambikapur.</p>
+      <div class="video-container">
+        <!-- Replace the src with your own video file or use a YouTube embed -->
+        <video controls poster="WhatsApp Video 2026-08-05 at 6.36.00 PM.mp4">
+          <source src="WhatsApp Video 2026-08-05 at 6.36.00 PM.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <p style="color:#6b7488; margin-top:12px; font-size:0.9rem;">
+        <i class="fas fa-info-circle" style="color:#e94f37;"></i> 
+      </p>
+    </section>
+
+    <!-- ====== SERVICES ====== -->
+    <section class="services" id="services">
+      <h2 class="section-title">Premium <span class="highlight">Facilities</span></h2>
+      <p class="section-sub">Everything you need to build strength, endurance, and confidence.</p>
+      <div class="services-grid">
+        <div class="service-card">
+          <i class="fas fa-weight-hanging"></i>
+          <h3>Modern Equipment</h3>
+          <p>Imported machines &amp; free weights for strength, cardio, and functional training.</p>
+        </div>
+        <div class="service-card">
+          <i class="fas fa-user-md"></i>
+          <h3>Certified Trainers</h3>
+          <p>Expert coaches with 5–10+ years of experience in body transformation and powerlifting.</p>
+        </div>
+        <div class="service-card">
+          <i class="fas fa-utensils"></i>
+          <h3>Custom Diet Plans</h3>
+          <p>Personalized nutrition for fat loss, muscle gain, and a sustainable healthy lifestyle.</p>
+        </div>
+        <div class="service-card">
+          <i class="fas fa-users"></i>
+          <h3>Personal Training</h3>
+          <p>One-on-one coaching for faster, safer, and more effective results.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== TRAINERS WITH IMAGES ====== -->
+    <section class="trainers" id="trainers">
+      <h2 class="section-title">Meet Your <span class="highlight">Coaches</span></h2>
+      <p class="section-sub">Learn from the best — experienced, passionate, and ready to guide you.</p>
+      <div class="trainers-grid">
+        <div class="trainer-card">
+          <!-- Replace src with actual trainer image -->
+          <img src="https://picsum.photos/seed/yogesh/200/200" alt="Yogesh Patel" />
+          <h4>Yogesh Patel</h4>
+          <div class="role">Powerlifter &amp; All-Rounder</div>
+          <span class="exp">5+ Years</span>
+        </div>
+        <div class="trainer-card">
+          <img src="https://picsum.photos/seed/rajesh/200/200" alt="Rajesh Singh" />
+          <h4>Rajesh Singh</h4>
+          <div class="role">Body Transformation</div>
+          <span class="exp">5+ Years</span>
+        </div>
+        <div class="trainer-card">
+          <img src="https://picsum.photos/seed/kamlesh/200/200" alt="Kamlesh" />
+          <h4>Kamlesh</h4>
+          <div class="role">Body Transformation &amp; Powerlifting</div>
+          <span class="exp">10+ Years</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== PRICING ====== -->
+    <section class="pricing" id="pricing">
+      <h2 class="section-title">Membership <span class="highlight">Plans</span></h2>
+      <p class="section-sub">Flexible options to fit your goals and budget.</p>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="plan">Monthly</div>
+          <div class="price">₹999 <small>/mo</small></div>
+          <ul>
+            <li><i class="fas fa-check"></i> Full gym access</li>
+            <li><i class="fas fa-check"></i> Cardio &amp; strength</li>
+            <li><i class="fas fa-check"></i> Locker room</li>
+          </ul>
+          <a href="#contact" class="btn-primary" style="padding:10px 28px;font-size:0.9rem;">Get Started</a>
+        </div>
+        <div class="pricing-card popular">
+          <div class="tag">MOST POPULAR</div>
+          <div class="plan">3 Months</div>
+          <div class="price">₹2,499 <small>/3 mo</small></div>
+          <ul>
+            <li><i class="fas fa-check"></i> Everything in Monthly</li>
+            <li><i class="fas fa-check"></i> 1 free PT session</li>
+            <li><i class="fas fa-check"></i> Diet consultation</li>
+          </ul>
+          <a href="#contact" class="btn-primary" style="padding:10px 28px;font-size:0.9rem;">Get Started</a>
+        </div>
+        <div class="pricing-card">
+          <div class="plan">6 Months</div>
+          <div class="price">₹3,499 <small>/6 mo</small></div>
+          <ul>
+            <li><i class="fas fa-check"></i> Everything in 3 Mo</li>
+            <li><i class="fas fa-check"></i> 3 free PT sessions</li>
+            <li><i class="fas fa-check"></i> Advanced tracking</li>
+          </ul>
+          <a href="#contact" class="btn-primary" style="padding:10px 28px;font-size:0.9rem;">Get Started</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== CTA / CONTACT ====== -->
+    <section class="cta-section" id="contact">
+      <h2>Ready to <span class="highlight">Start</span> Your Journey?</h2>
+      <p>
+        <i class="fas fa-map-pin" style="color:#e94f37;"></i> Banaras Chowk, above Nishant Next World, Ambikapur, CG 497001
+        <br />
+        <i class="fas fa-clock" style="color:#e94f37;"></i> Mon–Sat: 5:30 AM – 10:00 PM · Sunday Closed
+      </p>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;">
+        <a href="https://wa.me/917723846953" target="_blank" class="btn-primary" style="background:#25d366;box-shadow:0 8px 28px #25d36644;">
+          <i class="fab fa-whatsapp"></i> WhatsApp
+        </a>
+        <a href="tel:+917723846953" class="btn-primary" style="background:#1a73e8;box-shadow:0 8px 28px #1a73e844;">
+          <i class="fas fa-phone"></i> Call Now
+        </a>
+      </div>
+      <p style="margin-top:24px;font-size:0.9rem;color:#6b7488;">
+        <i class="fas fa-star" style="color:#e94f37;"></i> 4.7★ from 86+ members · Ambikapur's biggest gym
+      </p>
+    </section>
+
+    <!-- ====== FOOTER ====== -->
+    <footer class="footer">
+      <div>© 2026 Fitness Zone Ambikapur · All rights reserved</div>
+      <div class="socials">
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- ====== SCRIPTS ====== -->
+  <script>
+    // ---------- PRELOADER ----------
+    window.addEventListener('load', () => {
+      document.getElementById('preloader').classList.add('hide');
+    });
+
+    // ---------- PARTICLES ----------
+    (function particles() {
+      const canvas = document.getElementById('particles-canvas');
+      const ctx = canvas.getContext('2d');
+      let w, h;
+      const particles = [];
+      const COUNT = 70;
+
+      function resize() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      class Particle {
+        constructor() {
+          this.x = Math.random() * w;
+          this.y = Math.random() * h;
+          this.size = Math.random() * 2.2 + 0.6;
+          this.speedX = (Math.random() - 0.5) * 0.35;
+          this.speedY = (Math.random() - 0.5) * 0.35;
+          this.opacity = Math.random() * 0.5 + 0.15;
+        }
+        update() {
+          this.x += this.speedX;
+          this.y += this.speedY;
+          if (this.x < 0 || this.x > w) this.speedX *= -1;
+          if (this.y < 0 || this.y > h) this.speedY *= -1;
+        }
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(233, 79, 55, ${this.opacity})`;
+          ctx.fill();
+        }
+      }
+
+      for (let i = 0; i < COUNT; i++) {
+        particles.push(new Particle());
+      }
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, w, h);
+        particles.forEach(p => {
+          p.update();
+          p.draw();
+        });
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 120) {
+              ctx.beginPath();
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.strokeStyle = `rgba(233, 79, 55, ${0.08 * (1 - dist / 120)})`;
+              ctx.lineWidth = 0.7;
+              ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(animateParticles);
+      }
+      animateParticles();
+    })();
+
+    // ---------- SMOOTH SCROLL ----------
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href === '#') return;
+        e.preventDefault();
+        const target = document.querySelector(href);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // ---------- COUNTER ANIMATION ----------
+    function animateCounters() {
+      const stats = document.querySelectorAll('.hero-stats .num');
+      stats.forEach(el => {
+        const target = parseFloat(el.innerText);
+        if (isNaN(target)) return;
+        let current = 0;
+        const step = Math.ceil(target / 40);
+        const interval = setInterval(() => {
+          current += step;
+          if (current >= target) {
+            el.innerText = target + (el.innerText.includes('★') ? '★' : '+');
+            clearInterval(interval);
+          } else {
+            el.innerText = current + (el.innerText.includes('★') ? '★' : '');
+          }
+        }, 30);
+      });
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounters();
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+    const heroStats = document.querySelector('.hero-stats');
+    if (heroStats) observer.observe(heroStats);
+  </script>
+
+</body>
+</html>
